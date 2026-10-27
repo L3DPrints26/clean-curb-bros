@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fresh Porch Co.</title>
 <meta name="description" content="Porch, walkway and driveway cleaning by Lucas and Ashton. You get one flat price before we start.">
-<link rel="stylesheet" href="style.css?v=12">
+<link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
 
@@ -209,8 +209,9 @@
     }).then(function (r) { return r.json(); }).then(function (j) {
       if (j.success === 'true' || j.success === true) {
         form.reset(); statusEl.textContent = 'Thanks! We got your request and will get back to you soon.'; statusEl.className = 'status ok';
-      } else { throw new Error('fail'); }
-    }).catch(function () {
+      } else { throw new Error(j.message || 'fail'); }
+    }).catch(function (err) {
+      console.error('Form error:', err && err.message);
       statusEl.textContent = 'Something went wrong. Please call or text (214) 973-2563.'; statusEl.className = 'status err';
     }).then(function () { sendBtn.disabled = false; sendBtn.textContent = 'Send request'; });
   });
