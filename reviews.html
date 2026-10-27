@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reviews | Fresh Porch Co.</title>
+<meta name="description" content="Real reviews from real Fresh Porch Co. customers.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav id="nav" class="solid">
+  <div class="wrap">
+    <a class="logo" href="index.html"><i></i> Fresh Porch Co.</a>
+    <div class="links">
+      <a href="index.html#services">Services</a>
+      <a href="index.html#how">How it works</a>
+      <a href="reviews.html">Reviews</a>
+      <a class="btn sm" href="index.html#contact">Free quote</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <h1>Customer Reviews</h1>
+  <p>Only real customers. Every review is matched to a real job before it goes on this page.</p>
+</header>
+
+<section>
+  <div class="wrap stage">
+    <div class="eyebrow rev">What neighbors say</div>
+    <h2 class="rev">Reviews</h2>
+    <p class="sub rev">Posted word for word, good or bad.</p>
+
+    <div id="list" class="grid"></div>
+    <div id="empty" class="empty rev">
+      <h3>No reviews yet</h3>
+      <p>We're just getting started. Book one of our first jobs, and your review could be the first one here.</p>
+    </div>
+  </div>
+</section>
+
+<section class="dark">
+  <div class="wrap stage">
+    <div class="eyebrow rev">Leave a review</div>
+    <h2 class="rev">How reviews work</h2>
+    <p class="sub rev">We keep this page honest, so there is no open comment box.</p>
+    <div class="steps">
+      <div class="step rev" style="--d:.05s"><b>1</b><h3>We do your job</h3><p>Reviews are only accepted from customers we have actually cleaned for.</p></div>
+      <div class="step rev" style="--d:.15s"><b>2</b><h3>Text your review</h3><p>Send it from the same phone number you booked with. That lets us match it to your job.</p></div>
+      <div class="step rev" style="--d:.25s"><b>3</b><h3>We post it</h3><p>We add it with your first name and the date. We do not edit it, and we do not remove honest criticism.</p></div>
+    </div>
+    <div style="text-align:center;margin-top:34px" class="rev">
+      <a class="btn" href="sms:+12149732563?&body=Fresh%20Porch%20Co.%20review%20(stars%201-5%3A%20%20)%3A%20">Text a review</a>
+      <p style="color:#a9cdbd;margin-top:14px;font-size:.9rem">(214) 973-2563 &middot; Only for customers we have worked for.</p>
+    </div>
+  </div>
+</section>
+
+<footer>&copy; Fresh Porch Co. &middot; Lucas &amp; Ashton &middot; <a href="index.html" style="color:#8fb3a2">Home</a></footer>
+
+<script>
+/* To add a review, copy one line into the list below.
+   stars: 1-5   name: first name only   area: street or neighborhood   date: "Month Year"
+   Example:
+   { stars: 5, name: "Maria", area: "Oak Street", date: "March 2027", service: "Porch & walkway", text: "..." },
+*/
+var REVIEWS = [
+];
+
+(function () {
+  var list = document.getElementById('list'), empty = document.getElementById('empty');
+  function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+  if (REVIEWS.length) {
+    empty.style.display = 'none';
+    list.innerHTML = REVIEWS.map(function (r, i) {
+      var s = ''; for (var k = 0; k < 5; k++) s += k < r.stars ? '★' : '☆';
+      return '<div class="rev" style="--d:' + (i % 3) * 0.1 + 's"><div class="rcard"><div class="stars">' + s + '</div><p>' + esc(r.text) +
+        '</p><div class="who">' + esc(r.name) + '</div><div class="meta">' + esc(r.service || '') + ' &middot; ' + esc(r.area || '') + ' &middot; ' + esc(r.date || '') + '</div></div></div>';
+    }).join('');
+  }
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.rev').forEach(function (el) { io.observe(el); });
+})();
+</script>
+</body>
+</html>
