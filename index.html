@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fresh Porch Co.</title>
 <meta name="description" content="Porch, walkway and driveway cleaning by Lucas and Ashton. One flat price, quoted before we start.">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
@@ -161,11 +161,11 @@
 
     // the out-of-focus scene behind the glass: porch lights and greenery at dusk
     var lights = [], cols = ['255,214,140', '80,235,175', '90,200,255', '140,255,205'], tiny = [];
-    for (var i = 0; i < 18; i++) lights.push({ x: rnd() * W, y: rnd() * H * 0.85, r: 110 + rnd() * 200, c: cols[i % cols.length], a: 0.3 + rnd() * 0.3, core: 3 + rnd() * 7 });
+    for (var i = 0; i < 18; i++) lights.push({ x: rnd() * W, y: rnd() * H * 0.85, r: 90 + rnd() * 170, c: cols[i % cols.length], a: 0.16 + rnd() * 0.2, core: 3 + rnd() * 7 });
     for (var q = 0; q < 70; q++) tiny.push({ x: rnd() * W, y: rnd() * H, r: 1.5 + rnd() * 3.5, c: cols[q % cols.length] });
     function paintScene(c, sharp) {
       var g = c.createLinearGradient(0, 0, 0, H);
-      g.addColorStop(0, '#12332a'); g.addColorStop(0.55, '#195143'); g.addColorStop(1, '#0a1c16');
+      g.addColorStop(0, '#0e281f'); g.addColorStop(0.55, '#13392f'); g.addColorStop(1, '#07130e');
       c.fillStyle = g; c.fillRect(0, 0, W, H);
       lights.forEach(function (l) {
         var rg = c.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r);
@@ -183,7 +183,7 @@
         c.fillStyle = tg; c.fillRect(l.x - l.r * 2, l.y - l.r * 2, l.r * 4, l.r * 4);
       });
       var v = c.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.2, W / 2, H / 2, Math.max(W, H) * 0.75);
-      v.addColorStop(0, 'rgba(0,0,0,.18)'); v.addColorStop(1, 'rgba(0,0,0,.42)');
+      v.addColorStop(0, 'rgba(0,0,0,.28)'); v.addColorStop(1, 'rgba(0,0,0,.5)');
       c.fillStyle = v; c.fillRect(0, 0, W, H);
     }
     var sharp = document.createElement('canvas'); sharp.width = canvas.width; sharp.height = canvas.height;
