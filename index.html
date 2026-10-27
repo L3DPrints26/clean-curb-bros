@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fresh Porch Co.</title>
+<title>Curbside Cleaners</title>
 <meta name="description" content="Trash can, porch, and walkway cleaning by Lucas and Ashton. You get one flat price before we start.">
-<link rel="stylesheet" href="style.css?v=14">
+<link rel="stylesheet" href="style.css?v=15">
 </head>
 <body>
 
 <nav id="nav">
   <div class="wrap">
-    <a class="logo" href="#top">Fresh Porch Co.</a>
+    <a class="logo" href="#top">Curbside Cleaners</a>
     <div class="links">
       <a href="#services">Services</a>
       <a href="#story">Our story</a>
@@ -158,7 +158,7 @@
   </div>
 </section>
 
-<footer>&copy; Fresh Porch Co. &middot; Lucas &amp; Ashton &middot; <a href="reviews.html">Reviews</a></footer>
+<footer>&copy; Curbside Cleaners &middot; Lucas &amp; Ashton &middot; <a href="reviews.html">Reviews</a></footer>
 
 <script>
 (function () {
@@ -209,7 +209,7 @@
     if (!data.name || !data.message) { statusEl.textContent = 'Please add your name and what you need cleaned.'; statusEl.className = 'status err'; return; }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email || '')) { statusEl.textContent = 'Please enter a valid email so we can reply to you.'; statusEl.className = 'status err'; return; }
     delete data._honey;
-    data._subject = 'New quote request - Fresh Porch Co.';
+    data._subject = 'New quote request - Curbside Cleaners';
     data._template = 'table';
     sendBtn.disabled = true; sendBtn.textContent = 'Sending...';
     fetch('https://formsubmit.co/ajax/lythjohanashton@gmail.com', {
