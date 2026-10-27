@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reviews | Fresh Porch Co.</title>
 <meta name="description" content="Real reviews from real Fresh Porch Co. customers.">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 
@@ -47,13 +47,13 @@
     <h2 class="rev">How reviews work</h2>
     <p class="sub rev">We want every review here to be real, so there's no public comment box.</p>
     <div class="steps">
-      <div class="step rev" style="--d:.05s"><b>1</b><h3>We finish your job</h3><p>We only take reviews from customers we have worked for.</p></div>
+      <div class="step rev" style="--d:.05s"><b>1</b><h3>We finish your job</h3><p>We only take reviews from customers we've worked for.</p></div>
       <div class="step rev" style="--d:.15s"><b>2</b><h3>Text us your review</h3><p>Send it from the same phone number you booked with, so we can match it to your job.</p></div>
       <div class="step rev" style="--d:.25s"><b>3</b><h3>We post it</h3><p>We add it with your first name and the date, exactly as you wrote it.</p></div>
     </div>
     <div style="text-align:center;margin-top:34px" class="rev">
       <a class="btn" href="sms:+12149732563?&body=Fresh%20Porch%20Co.%20review%20(stars%201-5%3A%20%20)%3A%20">Text a review</a>
-      <p style="color:#a9cdbd;margin-top:14px;font-size:.9rem">(214) 973-2563 &middot; For customers we have worked with.</p>
+      <p style="color:#a9cdbd;margin-top:14px;font-size:.9rem">(214) 973-2563 &middot; Only for customers we've worked with.</p>
     </div>
   </div>
 </section>
@@ -75,7 +75,8 @@ var REVIEWS = [
   if (REVIEWS.length) {
     empty.style.display = 'none';
     list.innerHTML = REVIEWS.map(function (r, i) {
-      var s = ''; for (var k = 0; k < 5; k++) s += k < r.stars ? '★' : '☆';
+      var star = function (on) { return '<svg width="18" height="18" viewBox="0 0 24 24" style="margin-right:3px"><path d="M12 2l3 6.9 7.5.7-5.7 5 1.7 7.4L12 18l-6.5 4 1.7-7.4-5.7-5 7.5-.7z" fill="' + (on ? '#e8a900' : '#d9d9d9') + '"/></svg>'; };
+      var s = ''; for (var k = 0; k < 5; k++) s += star(k < r.stars);
       return '<div class="rev" style="--d:' + (i % 3) * 0.1 + 's"><div class="rcard"><div class="stars">' + s + '</div><p>' + esc(r.text) +
         '</p><div class="who">' + esc(r.name) + '</div><div class="meta">' + esc(r.service || '') + ' &middot; ' + esc(r.area || '') + ' &middot; ' + esc(r.date || '') + '</div></div></div>';
     }).join('');
