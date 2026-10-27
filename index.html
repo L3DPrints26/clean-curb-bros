@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fresh Porch Co.</title>
 <meta name="description" content="Porch, walkway and driveway cleaning by Lucas and Ashton. One flat price, quoted before we start.">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 
@@ -24,8 +24,7 @@
 </nav>
 
 <header class="hero" id="top">
-  <canvas class="glass" id="glass"></canvas>
-  <div class="inner" id="heroInner">
+    <div class="inner" id="heroInner">
     <div class="kicker">Porch and walkway cleaning</div>
     <h1>Make your front porch look brand new.</h1>
     <p>We clear the debris, wash it down and scrub it clean. You get one flat price before we start.</p>
@@ -144,147 +143,6 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var nav = document.getElementById('nav');
   var inner = document.getElementById('heroInner');
-  var hero = document.getElementById('top');
-  var canvas = document.getElementById('glass');
-
-  // Raindrops on a window pane. Drawn once (not animated) so they stay stuck in place.
-  // Each drop is an irregular shape that shows the scene behind it upside down, like real water on glass.
-  function build() {
-    var W = hero.clientWidth, H = hero.clientHeight;
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
-    var ctx = canvas.getContext('2d');
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    var seed = 11;
-    function rnd() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
-
-    // the out-of-focus scene behind the glass: porch lights and greenery at dusk
-    var lights = [], cols = ['255,214,140', '80,235,175', '90,200,255', '140,255,205'], tiny = [];
-    for (var i = 0; i < 18; i++) lights.push({ x: rnd() * W, y: rnd() * H * 0.85, r: 90 + rnd() * 170, c: cols[i % cols.length], a: 0.16 + rnd() * 0.2, core: 3 + rnd() * 7 });
-    for (var q = 0; q < 70; q++) tiny.push({ x: rnd() * W, y: rnd() * H, r: 1.5 + rnd() * 3.5, c: cols[q % cols.length] });
-    function paintScene(c, sharp) {
-      var g = c.createLinearGradient(0, 0, 0, H);
-      g.addColorStop(0, '#0e281f'); g.addColorStop(0.55, '#13392f'); g.addColorStop(1, '#07130e');
-      c.fillStyle = g; c.fillRect(0, 0, W, H);
-      lights.forEach(function (l) {
-        var rg = c.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r);
-        rg.addColorStop(0, 'rgba(' + l.c + ',' + l.a + ')'); rg.addColorStop(1, 'rgba(' + l.c + ',0)');
-        c.fillStyle = rg; c.fillRect(l.x - l.r, l.y - l.r, l.r * 2, l.r * 2);
-        if (sharp) {
-          var cg = c.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.core * 2.4);
-          cg.addColorStop(0, 'rgba(255,255,245,.95)'); cg.addColorStop(0.35, 'rgba(' + l.c + ',.7)'); cg.addColorStop(1, 'rgba(' + l.c + ',0)');
-          c.fillStyle = cg; c.fillRect(l.x - l.core * 3, l.y - l.core * 3, l.core * 6, l.core * 6);
-        }
-      });
-      if (sharp) tiny.forEach(function (l) {
-        var tg = c.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r * 2);
-        tg.addColorStop(0, 'rgba(255,255,250,1)'); tg.addColorStop(0.4, 'rgba(' + l.c + ',.8)'); tg.addColorStop(1, 'rgba(' + l.c + ',0)');
-        c.fillStyle = tg; c.fillRect(l.x - l.r * 2, l.y - l.r * 2, l.r * 4, l.r * 4);
-      });
-      var v = c.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.2, W / 2, H / 2, Math.max(W, H) * 0.75);
-      v.addColorStop(0, 'rgba(0,0,0,.28)'); v.addColorStop(1, 'rgba(0,0,0,.5)');
-      c.fillStyle = v; c.fillRect(0, 0, W, H);
-    }
-    var sharp = document.createElement('canvas'); sharp.width = canvas.width; sharp.height = canvas.height;
-    var sc = sharp.getContext('2d'); sc.setTransform(dpr, 0, 0, dpr, 0, 0);
-    paintScene(sc, true);
-    paintScene(ctx, false);
-
-    function dropPath(c, x, y, rx, ry, ph) {
-      c.beginPath();
-      for (var i = 0; i <= 40; i++) {
-        var t = i / 40 * Math.PI * 2, s = Math.sin(t);
-        var k = 1 + 0.06 * Math.sin(2 * t + ph[0]) + 0.045 * Math.sin(3 * t + ph[1]) + 0.025 * Math.sin(5 * t + ph[2]);
-        var px = x + Math.cos(t) * rx * k * (s > 0 ? 1 : 0.94);
-        var py = y + s * ry * k * (s < 0 ? 0.9 : 1);
-        if (i === 0) c.moveTo(px, py); else c.lineTo(px, py);
-      }
-      c.closePath();
-    }
-    function drop(c, x, y, rx, ry, ph) {
-      c.save(); c.shadowColor = 'rgba(0,0,0,.6)'; c.shadowBlur = ry * 0.7; c.shadowOffsetY = ry * 0.4;
-      c.fillStyle = 'rgba(0,0,0,.3)'; dropPath(c, x, y, rx, ry, ph); c.fill(); c.restore();
-      c.save(); dropPath(c, x, y, rx, ry, ph); c.clip();
-      var s = 0.5;
-      c.save(); c.translate(x, y); c.scale(-s, -s); c.translate(-x, -(y - ry * 0.25)); c.drawImage(sharp, 0, 0, W, H); c.restore();
-      c.fillStyle = 'rgba(255,255,255,.05)'; c.fillRect(x - rx * 2, y - ry * 2, rx * 4, ry * 4);
-      var rim = c.createRadialGradient(x, y + ry * 0.2, ry * 0.25, x, y + ry * 0.1, ry * 1.15);
-      rim.addColorStop(0, 'rgba(0,0,0,0)'); rim.addColorStop(0.7, 'rgba(0,0,0,.18)'); rim.addColorStop(1, 'rgba(0,0,0,.62)');
-      c.fillStyle = rim; c.fillRect(x - rx * 2, y - ry * 2, rx * 4, ry * 4);
-      var cau = c.createLinearGradient(0, y + ry * 0.3, 0, y + ry * 1.05);
-      cau.addColorStop(0, 'rgba(190,235,225,0)'); cau.addColorStop(1, 'rgba(190,235,225,.3)');
-      c.fillStyle = cau; c.fillRect(x - rx * 2, y + ry * 0.3, rx * 4, ry);
-      c.save(); c.translate(x - rx * 0.32, y - ry * 0.42); c.rotate(-0.55); c.scale(1, 0.55);
-      var hl = c.createRadialGradient(0, 0, 0, 0, 0, rx * 0.34);
-      hl.addColorStop(0, 'rgba(255,255,255,.95)'); hl.addColorStop(1, 'rgba(255,255,255,0)');
-      c.fillStyle = hl; c.beginPath(); c.arc(0, 0, rx * 0.34, 0, 7); c.fill(); c.restore();
-      c.save(); c.translate(x + rx * 0.36, y + ry * 0.5);
-      var h2 = c.createRadialGradient(0, 0, 0, 0, 0, rx * 0.16);
-      h2.addColorStop(0, 'rgba(255,255,255,.5)'); h2.addColorStop(1, 'rgba(255,255,255,0)');
-      c.fillStyle = h2; c.beginPath(); c.arc(0, 0, rx * 0.16, 0, 7); c.fill(); c.restore();
-      c.restore();
-      c.lineWidth = 1; c.strokeStyle = 'rgba(255,255,255,.16)'; dropPath(c, x, y, rx, ry, ph); c.stroke();
-    }
-    function mist(c, x, y, r) {
-      c.save(); c.shadowColor = 'rgba(0,0,0,.55)'; c.shadowBlur = r * 1.3; c.shadowOffsetY = r * 0.5;
-      c.fillStyle = 'rgba(150,205,190,.2)'; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill(); c.restore();
-      c.strokeStyle = 'rgba(255,255,255,.2)'; c.lineWidth = 0.7; c.beginPath(); c.arc(x, y, r, 0, 7); c.stroke();
-      c.fillStyle = 'rgba(255,255,255,.8)'; c.beginPath(); c.arc(x - r * 0.3, y - r * 0.35, Math.max(0.45, r * 0.26), 0, 7); c.fill();
-    }
-    function trail(c, x, yDrop, rx, len) {
-      var top = yDrop - len, L = [], R = [], steps = 16, w = rx * 0.4;
-      for (var i = 0; i <= steps; i++) {
-        var f = i / steps, y = top + len * f, off = Math.sin(i * 1.1 + x) * 1.3, wi = 0.5 + (w - 0.5) * Math.pow(f, 1.5);
-        L.push([x - wi + off, y]); R.push([x + wi + off, y]);
-      }
-      var g = c.createLinearGradient(0, top, 0, yDrop);
-      g.addColorStop(0, 'rgba(200,235,225,0)'); g.addColorStop(1, 'rgba(200,235,225,.17)');
-      c.fillStyle = g; c.beginPath(); c.moveTo(L[0][0], L[0][1]);
-      L.forEach(function (p) { c.lineTo(p[0], p[1]); });
-      for (var j = R.length - 1; j >= 0; j--) c.lineTo(R[j][0], R[j][1]);
-      c.closePath(); c.fill();
-      c.lineWidth = 0.8;
-      c.strokeStyle = 'rgba(0,0,0,.3)'; c.beginPath(); L.forEach(function (p, k) { k ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1]); }); c.stroke();
-      c.strokeStyle = 'rgba(255,255,255,.16)'; c.beginPath(); R.forEach(function (p, k) { k ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1]); }); c.stroke();
-      for (var b = 0; b < 3; b++) mist(c, x + (rnd() - 0.5) * 2, top + len * (0.2 + rnd() * 0.6), 1.2 + rnd() * 1.3);
-    }
-
-    // fine mist droplets
-    var area = W * H, placed = [], i2;
-    for (i2 = 0; i2 < area / 2600; i2++) mist(ctx, rnd() * W, rnd() * H, 0.9 + rnd() * 1.9);
-
-    // main drops: similar sizes, different shapes
-    var want = Math.max(14, Math.round(area / 19000)), list = [], tries = 0;
-    function free(x, y, r) { for (var k = 0; k < placed.length; k++) { var p = placed[k]; if (Math.hypot(p.x - x, p.y - y) < (p.r + r) * 0.95) return false; } return true; }
-    while (list.length < want && tries++ < want * 40) {
-      var big = rnd() < 0.07;
-      var rx = big ? 18 + rnd() * 6 : 8 + Math.pow(rnd(), 1.6) * 9;
-      var ry = rx * (0.92 + rnd() * 0.38);
-      var x = rnd() * W, y = rnd() * H;
-      if (!free(x, y, ry)) continue;
-      placed.push({ x: x, y: y, r: ry });
-      list.push({ x: x, y: y, rx: rx, ry: ry, ph: [rnd() * 6, rnd() * 6, rnd() * 6], drip: false });
-    }
-    // a few drops that have started running down the glass
-    var drips = 0;
-    list.forEach(function (d) {
-      if (drips < 6 && d.y > H * 0.25 && d.x > 20 && rnd() < 0.2) { d.drip = true; d.ry = d.rx * 1.5; drips++; }
-    });
-    list.forEach(function (d) { if (d.drip) trail(ctx, d.x, d.y, d.rx, 70 + rnd() * 130); });
-    list.sort(function (a, b) { return a.y - b.y; });
-    list.forEach(function (d) { drop(ctx, d.x, d.y, d.rx, d.ry, d.ph); });
-    // some drops that merged with a smaller neighbour
-    list.slice(0, 8).forEach(function (d) { drop(ctx, d.x + d.rx * 1.05, d.y + d.ry * 0.5, d.rx * 0.55, d.ry * 0.6, [1, 2, 3]); });
-  }
-  build();
-  var lastW = hero.clientWidth, lastH = hero.clientHeight, rt;
-  window.addEventListener('resize', function () {
-    clearTimeout(rt);
-    rt = setTimeout(function () {
-      if (hero.clientWidth !== lastW || Math.abs(hero.clientHeight - lastH) > 150) { lastW = hero.clientWidth; lastH = hero.clientHeight; build(); }
-    }, 200);
-  });
 
   var ticking = false;
   function onScroll() {
